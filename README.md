@@ -1,44 +1,91 @@
-# Predict_Student_Dropout_And_Acad
-# import numpy as np
-Numpy is general-purpose array-processing in python. It provides a high-performance multimensional array object and tools for working with these arrays. It is the fundamental package for scientific computing with Python. Besides its obvious scientific uses, Numpy can also be used as an efficient multi-dimensional container of generic data.
-# import pandas as pd
-pandas is a fast, powerful, flexiable and easy to use open data analysis and manipulation tools. It is built on the Python programmming language and is used for data manipulation and analysis. Pandas provides data structures for efficiently storing large datasets and tools for working with them. It is particularly useful for working with tabular data such as spreadsheets or SQL tables.
-# import matplotlib.pyplot as plt 
-Matplotlib is a comprehensive library for creating static, animated and interactive visualizations in Python. It is a plotting library for Python programming language and its numerical mathematics extension Numpy. It provides an object-oriented APl for embedding plots into application using general-purpose GUI toolkits like Tkinter.
-# import seaborn as sns
-Seaborn is a library for making statistical graphics in Python. Its build on top of matplotlib and integrates closely with pandas data structures. Seaborn help you explore and understand your data. Its plotting functions operate on dataframes and arrays containing whole datasets and internally perform the necessary semantic mapping and statistical aggregation to produce informative plots.
-# from google.colab import files 
-The google.colab module provides a way to upload and download files to and from your Google Drive account. The files module is used to interact with the file system in Colab. You can use the files.upload() function to upload files from your local machine to the Colab environment and the files.download() function to download files from the Colab environment to your local machine.
-# df.head()
-The df.head() function is used to display the first few rows of a pandas DataFrame. By default, it displays the first 5 rows of the DataFrame. You can pass an integer argument to the function to display a different number of rows. For example, df.head(10) would display the first 10 rows of the DataFrame.
-# df.info()
-The df.info() function is used to display a summary of a pandas DataFrame. It provides information about the DataFrame such as the number of rows and columns, the data types of each column, and the amount of memory used by the DataFrame. It is a useful function for quickly getting an overview of a DataFrame.
-# df.descride()
-The df.describe() function is used to display a statistical summary of a pandas DataFrame. It provides information such as the count, mean, standard deviation, minimum and maximum values, and the quartiles of the data. By default, it only displays the summary for the numerical columns in the DataFrame. You can pass an argument to the function to include the summary for all columns in the DataFrame.
-# EDA
-Exploratory Data Analysis (EDA) is an approach to analyzing data sets to summarize their main characteristics, often with visual methods. EDA is used for seeing what the data can tell us before the modeling task. It is not only important but also an essential step in any machine learning project. Python provides many libraries for EDA such as Pandas, NumPy, Matplotlib and Seaborn
-![EDA](https://github.com/Akram23679/Predict_Student_Dropout_And_Acad/assets/111181292/02e2a9a3-ceae-4a51-80ee-63bf5cef4f66)
-![camp](https://github.com/Akram23679/Predict_Student_Dropout_And_Acad/assets/111181292/7f01428d-d374-4a92-9f3f-68ff90488837)
-# sns.histplot(x='Unemployment rate',data=df,hue='Target')
-![unemp](https://github.com/Akram23679/Predict_Student_Dropout_And_Acad/assets/111181292/da71c269-b0bf-4bcc-bd88-92838938258d)
-# sns.histplot(x='Inflation rate',data=df,hue='Target')
-![infra](https://github.com/Akram23679/Predict_Student_Dropout_And_Acad/assets/111181292/8ce7f7de-6b01-425c-895c-2b838a101ba2)
-# from sklearn.model_selection import train_test_split
-The train_test_split() function is used to split a dataset into training and testing sets for machine learning. It is part of the scikit-learn library and is used to evaluate the performance of machine learning models. The function takes as input the dataset and a test size, and returns four arrays: the training data, the testing data, the training labels, and the testing labels.
-# Logistic Regression
-Logistic Regression is a statistical method for analyzing a dataset in which there are one or more independent variables that determine an outcome. The outcome is measured with a dichotomous variable (in which there are only two possible outcomes). It is used to model the probability of a certain class or event existing such as pass/fail, win/lose, alive/dead or healthy/sick.
-# from sklearn.linear_model import LogisticRegression
-The LogisticRegression() function is used to create a logistic regression model for machine learning. It is part of the scikit-learn library and is used to predict the probability of a binary outcome based on one or more predictor variables.
-# from sklearn.metrics import classification_report,confusion_matrix, accuracy_score, f1_score, recall_score, precision_score
-These functions are used to evaluate the performance of a machine learning model.
-![image](https://github.com/Akram23679/Predict_Student_Dropout_And_Acad/assets/111181292/a6d49538-7f32-4531-a5da-2dfbd3c9e6cf)
-Accuracy 0.7740112994350282
-**Logistic Regression performs very well on this case Study**
-# K-Nearst Neighbor
-K-Nearest Neighbor is a machine learning algorithm used for classification and regression. It is a non-parametric method used for classification and regression.
-# from sklearn.neighbors import KNeighborsClassifier
-The KNeighborsClassifier() function is used to create a K-Nearest Neighbor model for machine learning.
-![image](https://github.com/Akram23679/Predict_Student_Dropout_And_Acad/assets/111181292/c331127e-1704-4cea-9b4b-229ae5119a00)
-Accuracy 0.6598870056497175
-![k value](https://github.com/Akram23679/Predict_Student_Dropout_And_Acad/assets/111181292/7302d19e-32e4-4b57-a988-cbf8647f1231)
-**K-Nearst Neighbor does not perform well on this case Study**
+# 🎓 Predict Student Dropout and Academic Success
+
+A machine learning project that predicts whether a student will **Dropout**, remain **Enrolled**, or **Graduate**, based on academic, demographic, and socio-economic data collected at the time of enrollment and after the first two semesters.
+
+## 📌 Overview
+
+Student dropout is a major concern for higher education institutions. This project builds and compares several classification models to predict student outcomes early, so institutions can identify at-risk students and intervene before it's too late.
+
+The target variable has three classes:
+- **Dropout**
+- **Enrolled**
+- **Graduate**
+
+## 📂 Dataset
+
+The dataset (`dataset.csv`) contains **4,424 student records** with **35 features**, including:
+
+- **Demographics** — Marital status, Nationality, Gender, Age at enrollment, Displaced, International
+- **Academic background** — Application mode/order, Course, Daytime/evening attendance, Previous qualification, Parents' qualification & occupation
+- **Financial & social factors** — Debtor, Tuition fees up to date, Scholarship holder, Educational special needs
+- **Academic performance** — Curricular units enrolled/approved/evaluated/graded for the 1st and 2nd semesters
+- **Macroeconomic indicators** — Unemployment rate, Inflation rate, GDP
+- **Target** — Dropout / Enrolled / Graduate
+
+## 🔍 Exploratory Data Analysis (EDA)
+
+Before modeling, the notebook performs EDA using **Pandas**, **NumPy**, **Matplotlib**, and **Seaborn** to understand feature distributions and their relationship with the target:
+
+- `df.head()`, `df.info()`, `df.describe()` for a first look at the data
+- Histograms of all numerical features
+- Distribution plots such as `Unemployment rate` and `Inflation rate` segmented by `Target`, to see how macroeconomic conditions relate to student outcomes
+
+## 🤖 Models & Results
+
+The data was split 80/20 into training and test sets (`train_test_split`, `random_state=101`). Several classifiers from **scikit-learn** were trained and evaluated on accuracy, precision, recall, and F1-score:
+
+| Model | Accuracy |
+|---|---|
+| Logistic Regression | **77.4%** |
+| K-Nearest Neighbors (k=1) | 66.0% |
+| K-Nearest Neighbors (tuned, k=11) | 69.9% |
+| Decision Tree | 71.1% |
+| **Random Forest (n_estimators=200)** | **78.5%** ✅ Best performer |
+| Support Vector Machine (SVC) | 75.0% |
+| SVM (tuned via GridSearchCV) | 76.6% |
+
+**Random Forest achieved the highest accuracy (78.5%)**, closely followed by Logistic Regression (77.4%). Across all models, the **Graduate** class was predicted most reliably, while the **Enrolled** class was consistently the hardest to classify due to class overlap with Dropout/Graduate.
+
+## 🛠️ Tech Stack
+
+- **Python 3**
+- **NumPy** & **Pandas** — data manipulation
+- **Matplotlib** & **Seaborn** — visualization
+- **scikit-learn** — modeling & evaluation (`LogisticRegression`, `KNeighborsClassifier`, `DecisionTreeClassifier`, `RandomForestClassifier`, `SVC`, `GridSearchCV`)
+- **Google Colab** — development environment
+
+## 📁 Repository Structure
+
+```
+.
+├── Predict_Student_Dropout_And_Acad.ipynb   # Main notebook: EDA, modeling, evaluation
+├── dataset.csv                              # Student records dataset
+└── README.md                                # Project documentation
+```
+
+## 🚀 Getting Started
+
+1. Clone the repository
+   ```bash
+   git clone https://github.com/Akram23679/Predict_Student_Dropout_And_Acad.git
+   cd Predict_Student_Dropout_And_Acad
+   ```
+2. Install dependencies
+   ```bash
+   pip install numpy pandas matplotlib seaborn scikit-learn
+   ```
+3. Open and run the notebook
+   ```bash
+   jupyter notebook Predict_Student_Dropout_And_Acad.ipynb
+   ```
+   *(Originally developed in Google Colab — `google.colab.files` upload calls can be swapped for a direct `pd.read_csv("dataset.csv")` when running locally.)*
+
+## 📈 Key Takeaways
+
+- Ensemble methods (Random Forest) and simple linear models (Logistic Regression) outperformed distance-based methods (KNN) on this dataset.
+- First and second semester academic performance (units approved, grades) were strong predictors of final outcome.
+- Macroeconomic indicators (unemployment, inflation, GDP) show visible but secondary influence on dropout risk.
+
+## 📄 License
+
+This project is open source and available for educational and research purposes.
