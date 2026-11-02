@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Machine learning case study predicting student dropout, enrolment and graduation from academic, demographic and socio-economic data.">
+<title>Student Dropout Prediction — Akram Ali</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap navin">
+    <a class="brand" href="#top"><i></i>akram.data</a>
+    <nav class="navlinks">
+      <a href="#brief">Brief</a>
+      <a href="#data">Data</a>
+      <a href="#eda">EDA</a>
+      <a href="#models">Models</a>
+      <a href="#findings">Findings</a>
+      <a href="#actions">Actions</a>
+    </nav>
+    <button class="theme" id="themeBtn" aria-label="Toggle colour theme">◐</button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- Hero -->
+  <div class="wrap hero">
+    <div>
+      <span class="pill"><i></i>Machine Learning · Multi-class Classification</span>
+      <h1>Predicting student dropout: <em>spotting students at risk before they leave.</em></h1>
+      <p class="lede">A machine learning project that predicts whether a student will <b>drop out</b>, stay <b>enrolled</b> or <b>graduate</b>, using academic, demographic and socio-economic data for <b>4,424 students</b>. Six classification models were trained, tuned and compared to find the strongest early-warning signals.</p>
+      <div class="ctas">
+        <a class="btn primary" href="#models">See model results →</a>
+        <a class="btn ghost" href="#findings">Read key findings</a>
+      </div>
+      <div class="tags">
+        <span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">Scikit-learn</span>
+        <span class="tag">Seaborn</span><span class="tag">Matplotlib</span><span class="tag">Jupyter</span>
+      </div>
+    </div>
+
+    <div class="dcard">
+      <div class="dhead">
+        <div class="tabs" role="tablist">
+          <button class="tab" role="tab" aria-selected="true" data-view="dataset">Dataset</button>
+          <button class="tab" role="tab" aria-selected="false" data-view="model">Models</button>
+          <button class="tab" role="tab" aria-selected="false" data-view="drivers">Drivers</button>
+        </div>
+        <span class="code">ML-CLF</span>
+      </div>
+
+      <div class="view" data-panel="dataset">
+        <div class="kpis">
+          <div class="kpi"><small>Students</small><strong>4,424</strong></div>
+          <div class="kpi"><small>Features</small><strong>34</strong></div>
+          <div class="kpi"><small>Outcomes</small><strong>3</strong></div>
+        </div>
+        <div class="bars">
+          <div class="barstitle">Students by outcome</div>
+          <div class="brow lead"><span class="lbl">Graduate</span><span class="track"><span class="fill grad" style="width:100%"></span></span><span class="val">49.9%</span></div>
+          <div class="brow"><span class="lbl">Dropout</span><span class="track"><span class="fill drop" style="width:64.3%"></span></span><span class="val">32.1%</span></div>
+          <div class="brow"><span class="lbl">Enrolled</span><span class="track"><span class="fill enrol" style="width:35.9%"></span></span><span class="val">17.9%</span></div>
+          <p class="takeaway"><b>Takeaway:</b> classes are imbalanced, so models are judged on macro F1 as well as accuracy.</p>
+        </div>
+      </div>
+
+      <div class="view" data-panel="model" hidden>
+        <div class="kpis">
+          <div class="kpi"><small>Best accuracy</small><strong>77.7%</strong></div>
+          <div class="kpi"><small>Macro F1</small><strong>0.712</strong></div>
+          <div class="kpi"><small>Models</small><strong>6</strong></div>
+        </div>
+        <div class="bars">
+          <div class="barstitle">Test accuracy by model</div>
+          <div class="brow lead"><span class="lbl">SVM (tuned)</span><span class="track"><span class="fill" style="width:77.7%"></span></span><span class="val">77.7%</span></div>
+          <div class="brow"><span class="lbl">Random Forest</span><span class="track"><span class="fill dim" style="width:77.4%"></span></span><span class="val">77.4%</span></div>
+          <div class="brow"><span class="lbl">Logistic Reg.</span><span class="track"><span class="fill dim" style="width:77.3%"></span></span><span class="val">77.3%</span></div>
+          <div class="brow"><span class="lbl">KNN (k=14)</span><span class="track"><span class="fill dim" style="width:71.6%"></span></span><span class="val">71.6%</span></div>
+          <div class="brow"><span class="lbl">Decision Tree</span><span class="track"><span class="fill dim" style="width:70.5%"></span></span><span class="val">70.5%</span></div>
+          <p class="takeaway"><b>Takeaway:</b> the top three models are within 0.4 points of each other, effectively a tie.</p>
+        </div>
+      </div>
+
+      <div class="view" data-panel="drivers" hidden>
+        <div class="kpis">
+          <div class="kpi"><small>Fees overdue</small><strong>86.6%</strong></div>
+          <div class="kpi"><small>Debtors</small><strong>62.0%</strong></div>
+          <div class="kpi"><small>Age 25–29</small><strong>57.6%</strong></div>
+        </div>
+        <div class="bars">
+          <div class="barstitle">Top predictors (Random Forest importance)</div>
+          <div class="brow lead"><span class="lbl">2nd sem approved</span><span class="track"><span class="fill" style="width:100%"></span></span><span class="val">0.148</span></div>
+          <div class="brow"><span class="lbl">2nd sem grade</span><span class="track"><span class="fill dim" style="width:70.5%"></span></span><span class="val">0.104</span></div>
+          <div class="brow"><span class="lbl">1st sem approved</span><span class="track"><span class="fill dim" style="width:61.3%"></span></span><span class="val">0.090</span></div>
+          <div class="brow"><span class="lbl">1st sem grade</span><span class="track"><span class="fill dim" style="width:51.1%"></span></span><span class="val">0.075</span></div>
+          <div class="brow"><span class="lbl">Age at enrolment</span><span class="track"><span class="fill dim" style="width:28.7%"></span></span><span class="val">0.042</span></div>
+          <p class="takeaway"><b>Takeaway:</b> KPIs show the dropout rate in each group; semester results are the strongest predictors.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 01 Brief -->
+  <section class="block" id="brief">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">01 / project brief</div><h2>Identify at-risk students early enough to help.</h2></div>
+        <p>Dropout is costly for students and institutions alike. The project builds classification models that predict each student's outcome and identifies which factors most strongly separate dropouts from graduates, so support can be targeted earlier.</p>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><strong>4,424</strong><span>student records</span></div>
+        <div class="stat"><strong>34</strong><span>input features</span></div>
+        <div class="stat"><strong>3</strong><span>outcome classes</span></div>
+        <div class="stat"><strong>6</strong><span>models compared</span></div>
+      </div>
+      <div class="two">
+        <div class="panel">
+          <div class="panel-h"><span>Project questions</span><span>Scope</span></div>
+          <div class="panel-body"><ul>
+            <li><b>Prediction:</b> can a student's outcome (Dropout, Enrolled, Graduate) be predicted reliably?</li>
+            <li><b>Model choice:</b> which algorithm performs best on imbalanced, three-class data?</li>
+            <li><b>Drivers:</b> which academic, financial and demographic factors matter most?</li>
+            <li><b>Action:</b> how can the results support an early-warning system?</li>
+          </ul></div>
+        </div>
+        <div class="panel">
+          <div class="panel-h"><span>Project deliverables</span><span>Analysis</span></div>
+          <div class="panel-body"><ul>
+            <li>Jupyter notebook covering inspection, EDA, modelling and evaluation.</li>
+            <li>Exploratory charts: outcome mix, correlations, academic and macroeconomic patterns.</li>
+            <li>Six trained classifiers with cross-validated tuning for KNN and SVM.</li>
+            <li>Model comparison, feature importance and recommendations.</li>
+          </ul></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Data -->
+  <section class="block" id="data">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">02 / data and method</div><h2>Clean data, a fair split and leak-free tuning.</h2></div>
+        <p>The dataset is <i>Predict Students' Dropout and Academic Success</i> (Realinho et al., UCI Machine Learning Repository). Every feature is numeric, with no missing values or duplicate rows.</p>
+      </div>
+      <div class="two">
+        <div class="panel">
+          <div class="panel-h"><span>Data and features</span><span>Inputs</span></div>
+          <div class="panel-body"><ul>
+            <li><b>Enrolment:</b> application mode and order, course, attendance, previous qualification.</li>
+            <li><b>Background:</b> age, gender, nationality, parents' qualifications and occupations.</li>
+            <li><b>Financial:</b> debtor status, tuition fees up to date, scholarship holder.</li>
+            <li><b>Academic:</b> 1st- and 2nd-semester curricular units credited, enrolled, evaluated, approved and grades.</li>
+            <li><b>Macroeconomic:</b> unemployment rate, inflation rate and GDP.</li>
+          </ul></div>
+        </div>
+        <div class="panel">
+          <div class="panel-h"><span>Method</span><span>Pipeline</span></div>
+          <div class="panel-body"><ol>
+            <li>Loaded the CSV with BOM handling and checked types, missing values and duplicates.</li>
+            <li>Explored distributions, correlations and outcome patterns with Seaborn.</li>
+            <li>Split 80/20 with stratification (3,539 train / 885 test students).</li>
+            <li>Wrapped scale-sensitive models in a <b>StandardScaler pipeline</b> to avoid data leakage.</li>
+            <li>Tuned KNN's <i>k</i> and SVM's <i>C</i> and <i>gamma</i> with <b>5-fold stratified cross-validation</b> on training data only.</li>
+            <li>Scored every model on the held-out test set with accuracy and <b>macro F1</b>.</li>
+          </ol></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 EDA -->
+  <section class="block" id="eda">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">03 / exploratory analysis</div><h2>What separates dropouts from graduates?</h2></div>
+        <p>These charts are computed from the project dataset. Group percentages show the share of students in each outcome; they describe associations, not causes.</p>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <span><i class="drop"></i>Dropout</span><span><i class="enrol"></i>Enrolled</span><span><i class="grad"></i>Graduate</span>
+      </div>
+      <div class="chart-grid">
+        <div class="chart-panel"><h3>Outcome distribution</h3><p>Number of students per outcome (n = 4,424)</p><div class="chartbox"><canvas id="outcomeChart" aria-label="Doughnut chart of student outcomes"></canvas></div></div>
+        <div class="chart-panel"><h3>Academic performance by outcome</h3><p>Average curricular units approved and grade (0–20 scale)</p><div class="chartbox"><canvas id="perfChart" aria-label="Bar chart of average approved units and grades by outcome"></canvas></div></div>
+        <div class="chart-panel"><h3>Outcome by financial status</h3><p>Share of each group by outcome; group size in brackets</p><div class="chartbox tall"><canvas id="finChart" aria-label="Stacked bar chart of outcomes by financial status"></canvas></div></div>
+        <div class="chart-panel"><h3>Outcome by age and gender</h3><p>Share of each group by outcome; group size in brackets</p><div class="chartbox tall"><canvas id="demoChart" aria-label="Stacked bar chart of outcomes by age group and gender"></canvas></div></div>
+        <div class="chart-panel wide">
+          <h3>Feature correlation matrix</h3>
+          <p>Pearson correlation between all 34 features. Hover or tap a cell for details. S1 / S2 = curricular units in the 1st / 2nd semester.</p>
+          <div class="heat-wrap" id="heatWrap"><canvas id="heatmap" role="img" aria-label="Correlation heatmap of 34 features"></canvas><div class="tip" id="heatTip"></div></div>
+          <div class="heat-scale"><span>−1</span><span class="ramp"></span><span>+1</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 Models -->
+  <section class="block" id="models">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">04 / model results</div><h2>Six models, one held-out test set.</h2></div>
+        <p>All models were scored on the same 885 unseen students. Macro F1 weights each class equally, so it reveals how well a model handles the small <i>Enrolled</i> group.</p>
+      </div>
+      <div class="chart-grid">
+        <div class="chart-panel"><h3>Accuracy and macro F1</h3><p>Test-set performance by model</p><div class="chartbox tall"><canvas id="modelChart" aria-label="Grouped bar chart of accuracy and macro F1 by model"></canvas></div></div>
+        <div class="chart-panel"><h3>F1 score by class</h3><p>Every model struggles most with the Enrolled class</p><div class="chartbox tall"><canvas id="classChart" aria-label="Grouped bar chart of F1 score by class and model"></canvas></div></div>
+        <div class="chart-panel"><h3>Confusion matrix: tuned SVM</h3><p>Rows are actual outcomes, columns are predictions (C = 100, gamma = 0.001)</p><div id="cm"></div><p class="cm-note">Shading shows the share of each actual class. Most errors put Enrolled students into Graduate.</p></div>
+        <div class="chart-panel"><h3>Top 15 features</h3><p>Random Forest feature importance</p><div class="chartbox tall"><canvas id="impChart" aria-label="Horizontal bar chart of top 15 feature importances"></canvas></div></div>
+        <div class="chart-panel wide">
+          <h3>Model summary</h3><p>Test-set scores, sorted by accuracy</p>
+          <div class="table-scroll">
+            <table class="mtable">
+              <thead><tr><th>Model</th><th>Setup</th><th class="n">Accuracy</th><th class="n">Macro F1</th></tr></thead>
+              <tbody>
+                <tr class="best"><td>SVM (tuned)</td><td>RBF, C = 100, gamma = 0.001, GridSearchCV</td><td class="n">0.777</td><td class="n">0.712</td></tr>
+                <tr><td>Random Forest</td><td>200 trees</td><td class="n">0.774</td><td class="n">0.706</td></tr>
+                <tr><td>Logistic Regression</td><td>Scaled, max_iter = 5000</td><td class="n">0.773</td><td class="n">0.696</td></tr>
+                <tr><td>SVM</td><td>RBF, default parameters</td><td class="n">0.755</td><td class="n">0.670</td></tr>
+                <tr><td>KNN</td><td>k = 14, chosen by 5-fold CV</td><td class="n">0.716</td><td class="n">0.612</td></tr>
+                <tr><td>Decision Tree</td><td>Default parameters</td><td class="n">0.705</td><td class="n">0.649</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 Findings -->
+  <section class="block" id="findings">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">05 / findings</div><h2>Where the data points to risk.</h2></div>
+        <p>Findings combine model results with exploratory analysis. Group differences are associations in this dataset and should not be read as proof of cause.</p>
+      </div>
+      <div class="findings">
+        <div class="finding"><div class="big">77.7%</div><h3>Three models effectively tie</h3><p>Tuned SVM (77.7%), Random Forest (77.4%) and Logistic Regression (77.3%) are within 4 predictions of each other on 885 test students. KNN and a single Decision Tree are clearly weaker.</p></div>
+        <div class="finding"><div class="big warn">0.43</div><h3>Enrolled is the hardest class</h3><p>Even the best model recalls only 43% of Enrolled students, most of whom it predicts as Graduate. This is why macro F1 (0.71) sits well below accuracy.</p></div>
+        <div class="finding"><div class="big">1.9 vs 6.2</div><h3>Semester results lead everything</h3><p>Dropouts pass an average of 1.9 units in the 2nd semester versus 6.2 for graduates, with grades of 5.9 vs 12.7. Approved units and grades are the four strongest predictors.</p></div>
+        <div class="finding"><div class="big warn">86.6%</div><h3>Overdue fees signal dropout</h3><p>86.6% of students whose tuition fees were not up to date dropped out, compared with 24.7% of those who were current. 62% of debtors also dropped out.</p></div>
+        <div class="finding"><div class="big">76%</div><h3>Scholarships align with graduation</h3><p>76% of scholarship holders graduated, against 41% of other students, and only 12% dropped out.</p></div>
+        <div class="finding"><div class="big warn">57.6%</div><h3>Older entrants are more at risk</h3><p>Students who enrolled aged 25–29 dropped out at 57.6%, compared with 21.2% for those aged 17–20. Macroeconomic indicators ranked low as predictors.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 Actions -->
+  <section class="block" id="actions">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">06 / recommendations</div><h2>Six actions for an early-warning system.</h2></div>
+        <p>Recommendations cover how an institution could use the findings and how the model itself could be improved.</p>
+      </div>
+      <div class="actions">
+        <div class="action"><span class="num">01</span><div><h3>Flag risk after the 1st semester</h3><p>Use approved units and grades to trigger tutoring, academic advising and check-ins for students who fall behind early.</p></div></div>
+        <div class="action"><span class="num">02</span><div><h3>Monitor fees and debt</h3><p>Treat overdue tuition as an early alert. Offer payment plans, hardship funds and financial counselling before students disengage.</p></div></div>
+        <div class="action"><span class="num">03</span><div><h3>Expand financial support</h3><p>Review scholarship reach and eligibility, since scholarship holders show much stronger graduation outcomes.</p></div></div>
+        <div class="action"><span class="num">04</span><div><h3>Support mature students</h3><p>Provide flexible scheduling, evening options and targeted mentoring for students who enrol at 25 or older.</p></div></div>
+        <div class="action"><span class="num">05</span><div><h3>Improve the Enrolled class</h3><p>Try <code>class_weight="balanced"</code>, resampling and gradient boosting (e.g. HistGradientBoosting) to lift recall on the minority class.</p></div></div>
+        <div class="action"><span class="num">06</span><div><h3>Build an enrolment-time model</h3><p>Train a version on features known at admission only, so risk can be flagged before any semester results exist.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 Limits -->
+  <section class="block" id="limits">
+    <div class="wrap">
+      <div class="sec-head">
+        <div><div class="eyebrow">07 / limitations and next steps</div><h2>Interpret the results within the data's limits.</h2></div>
+        <p>The models are a strong baseline, but several factors should be addressed before using them to make decisions about real students.</p>
+      </div>
+      <div class="limits">
+        <div class="panel">
+          <div class="panel-h"><span>Limitations</span></div>
+          <ul>
+            <li>Data comes from one higher-education institution, so results may not transfer elsewhere.</li>
+            <li>The strongest features are semester results, which are only available after students have started.</li>
+            <li>Categorical codes (course, occupation) were used as numbers rather than one-hot encoded.</li>
+            <li>Demographic and financial patterns are associations, not causes.</li>
+          </ul>
+        </div>
+        <div class="panel">
+          <div class="panel-h"><span>Suggested next steps</span></div>
+          <ul>
+            <li>One-hot encode categorical features and compare results.</li>
+            <li>Test gradient boosting and class-balanced models.</li>
+            <li>Check fairness: compare error rates across gender and age groups.</li>
+            <li>Validate on newer cohorts before using predictions operationally.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>Akram Ali · Data Analytics Project · Student Dropout Prediction</span>
+    <span>Python · Scikit-learn · Dataset: Realinho et al., UCI ML Repository</span>
+  </div>
+</footer>
+
+<script>
+const D = {"target":[1421,794,2209],"tuition":{"labels":["Not up to date","Up to date"],"rows":[[86.6,8.0,5.5],[24.7,19.3,56.0]],"n":[528,3896]},"debtor":{"labels":["Not debtor","Debtor"],"rows":[[28.3,18.0,53.8],[62.0,17.9,20.1]],"n":[3921,503]},"scholar":{"labels":["No scholarship","Scholarship"],"rows":[[38.7,20.0,41.3],[12.2,11.8,76.0]],"n":[3325,1099]},"gender":{"labels":["Female","Male"],"rows":[[25.1,17.0,57.9],[45.1,19.7,35.2]],"n":[2868,1556]},"age":{"labels":["17–20","21–24","25–29","30+"],"rows":[[21.2,18.5,60.3],[33.7,21.9,44.4],[57.6,16.9,25.5],[54.1,12.7,33.2]],"n":[2551,735,427,711]},"means":{"Curricular units 1st sem (approved)":[2.55,4.32,6.23],"Curricular units 2nd sem (approved)":[1.94,4.06,6.18],"Curricular units 1st sem (grade)":[7.26,11.13,12.64],"Curricular units 2nd sem (grade)":[5.9,11.12,12.7],"Age at enrollment":[26.07,22.37,21.78]},"corr":{"labels":["Marital status","Application mode","Application order","Course","Daytime/evening attendance","Previous qualification","Nacionality","Mother's qualification","Father's qualification","Mother's occupation","Father's occupation","Displaced","Educational special needs","Debtor","Tuition fees up to date","Gender","Scholarship holder","Age at enrollment","International","Curricular units 1st sem (credited)","Curricular units 1st sem (enrolled)","Curricular units 1st sem (evaluations)","Curricular units 1st sem (approved)","Curricular units 1st sem (grade)","Curricular units 1st sem (without evaluations)","Curricular units 2nd sem (credited)","Curricular units 2nd sem (enrolled)","Curricular units 2nd sem (evaluations)","Curricular units 2nd sem (approved)","Curricular units 2nd sem (grade)","Curricular units 2nd sem (without evaluations)","Unemployment rate","Inflation rate","GDP"],"m":[[1.0,0.22,-0.13,0.02,-0.27,0.12,-0.02,0.19,0.13,0.07,0.02,-0.23,-0.03,0.03,-0.09,-0.01,-0.05,0.52,-0.03,0.06,0.05,0.06,-0.03,-0.06,0.03,0.06,0.04,0.02,-0.04,-0.07,0.02,-0.02,0.01,-0.03],[0.22,1.0,-0.25,-0.09,-0.27,0.43,-0.0,0.09,0.07,0.03,0.0,-0.26,-0.03,0.11,-0.13,0.15,-0.15,0.45,0.01,0.24,0.16,0.22,-0.02,-0.11,0.04,0.23,0.13,0.16,-0.07,-0.1,0.04,0.09,-0.02,-0.01],[-0.13,-0.25,1.0,0.12,0.16,-0.2,-0.03,-0.06,-0.05,-0.05,-0.03,0.33,0.03,-0.07,0.06,-0.09,0.07,-0.27,-0.03,-0.13,-0.02,-0.09,0.04,0.06,-0.03,-0.13,0.03,-0.06,0.07,0.06,-0.02,-0.1,-0.01,0.03],[0.02,-0.09,0.12,1.0,-0.07,-0.16,-0.0,0.06,0.05,0.03,0.02,0.01,-0.0,-0.05,0.03,-0.11,0.05,-0.04,-0.0,-0.14,0.11,0.03,0.08,0.18,-0.06,-0.12,0.19,0.05,0.12,0.18,-0.01,-0.05,0.03,-0.01],[-0.27,-0.27,0.16,-0.07,1.0,-0.1,0.02,-0.2,-0.14,-0.04,0.0,0.25,0.03,0.01,0.04,-0.01,0.09,-0.46,0.03,-0.13,-0.04,-0.05,0.02,0.06,0.05,-0.11,0.0,0.01,0.03,0.05,-0.0,0.06,-0.02,0.02],[0.12,0.43,-0.2,-0.16,-0.1,1.0,-0.04,0.02,0.01,0.01,0.01,-0.15,-0.02,0.12,-0.1,0.09,-0.09,0.25,-0.03,0.16,0.08,0.13,-0.01,-0.03,0.02,0.14,0.06,0.1,-0.04,-0.04,0.02,0.1,-0.06,0.05],[-0.02,-0.0,-0.03,-0.0,0.02,-0.04,1.0,-0.04,-0.09,0.04,0.02,-0.01,-0.0,0.07,-0.04,-0.03,-0.02,-0.01,0.91,0.01,-0.01,0.01,0.0,0.0,0.03,-0.0,-0.02,-0.02,-0.01,-0.01,-0.01,-0.01,-0.01,0.04],[0.19,0.09,-0.06,0.06,-0.2,0.02,-0.04,1.0,0.52,0.3,0.12,-0.08,-0.02,0.02,-0.02,-0.06,0.05,0.28,-0.04,0.04,0.05,0.04,-0.01,-0.03,0.0,0.04,0.03,0.02,-0.01,-0.03,0.02,-0.11,0.06,-0.08],[0.13,0.07,-0.05,0.05,-0.14,0.01,-0.09,0.52,1.0,0.21,0.18,-0.06,0.0,-0.01,-0.02,-0.07,0.11,0.19,-0.09,0.04,0.04,0.04,0.01,-0.01,-0.02,0.04,0.02,0.01,0.01,-0.01,-0.01,-0.08,0.06,-0.07],[0.07,0.03,-0.05,0.03,-0.04,0.01,0.04,0.3,0.21,1.0,0.72,-0.04,-0.01,0.11,-0.0,-0.02,0.09,0.09,0.04,0.0,0.01,0.02,0.02,0.02,-0.01,-0.0,0.01,0.01,0.02,0.04,-0.0,-0.01,0.02,0.09],[0.02,0.0,-0.03,0.02,0.0,0.01,0.02,0.12,0.18,0.72,1.0,-0.02,0.0,0.09,0.02,-0.03,0.06,0.0,0.02,-0.01,0.01,0.0,0.02,0.02,-0.04,-0.01,0.01,0.0,0.02,0.04,-0.04,-0.03,0.01,0.13],[-0.23,-0.26,0.33,0.01,0.25,-0.15,-0.01,-0.08,-0.06,-0.04,-0.02,1.0,0.0,-0.09,0.1,-0.13,0.07,-0.36,-0.01,-0.1,-0.06,-0.08,0.05,0.06,-0.02,-0.09,-0.04,-0.04,0.06,0.07,-0.04,-0.13,-0.01,0.06],[-0.03,-0.03,0.03,-0.0,0.03,-0.02,-0.0,-0.02,0.0,-0.01,0.0,0.0,1.0,0.0,0.01,-0.02,0.02,-0.04,-0.0,-0.02,-0.03,-0.03,-0.02,-0.01,-0.01,-0.02,-0.03,-0.01,-0.02,-0.01,-0.01,0.05,0.0,0.01],[0.03,0.11,-0.07,-0.05,0.01,0.12,0.07,0.02,-0.01,0.11,0.09,-0.09,0.0,1.0,-0.41,0.05,-0.07,0.1,0.08,0.03,-0.01,0.04,-0.11,-0.1,0.0,0.03,-0.03,0.02,-0.15,-0.14,0.05,0.02,-0.02,0.08],[-0.09,-0.13,0.06,0.03,0.04,-0.1,-0.04,-0.02,-0.02,-0.0,0.02,0.1,0.01,-0.41,1.0,-0.1,0.14,-0.18,-0.04,0.0,0.06,0.03,0.24,0.25,-0.05,0.01,0.09,0.06,0.29,0.3,-0.07,0.01,-0.0,-0.0],[-0.01,0.15,-0.09,-0.11,-0.01,0.09,-0.03,-0.06,-0.07,-0.02,-0.03,-0.13,-0.02,0.05,-0.1,1.0,-0.17,0.15,-0.03,0.02,-0.1,-0.02,-0.18,-0.19,-0.01,0.02,-0.12,-0.04,-0.22,-0.2,0.06,0.02,0.0,-0.01],[-0.05,-0.15,0.07,0.05,0.09,-0.09,-0.02,0.05,0.11,0.09,0.06,0.07,0.02,-0.07,0.14,-0.17,1.0,-0.19,-0.03,-0.09,-0.0,-0.06,0.15,0.17,-0.06,-0.08,0.03,-0.02,0.2,0.18,-0.05,0.06,-0.03,0.04],[0.52,0.45,-0.27,-0.04,-0.46,0.25,-0.01,0.28,0.19,0.09,0.0,-0.36,-0.04,0.1,-0.18,0.15,-0.19,1.0,-0.01,0.23,0.14,0.14,-0.05,-0.16,0.06,0.21,0.09,0.06,-0.11,-0.17,0.06,0.03,0.03,-0.06],[-0.03,0.01,-0.03,-0.0,0.03,-0.03,0.91,-0.04,-0.09,0.04,0.02,-0.01,-0.0,0.08,-0.04,-0.03,-0.03,-0.01,1.0,0.01,0.0,0.01,0.01,0.01,0.03,0.0,-0.01,-0.0,-0.01,0.0,-0.01,-0.01,-0.01,0.04],[0.06,0.24,-0.13,-0.14,-0.13,0.16,0.01,0.04,0.04,0.0,-0.01,-0.1,-0.02,0.03,0.0,0.02,-0.09,0.23,0.01,1.0,0.77,0.54,0.63,0.12,0.12,0.94,0.64,0.43,0.49,0.13,0.06,0.01,0.02,-0.03],[0.05,0.16,-0.02,0.11,-0.04,0.08,-0.01,0.05,0.04,0.01,0.01,-0.06,-0.03,-0.01,0.06,-0.1,-0.0,0.14,0.0,0.77,1.0,0.68,0.77,0.38,0.13,0.75,0.94,0.6,0.67,0.36,0.07,0.04,0.04,-0.03],[0.06,0.22,-0.09,0.03,-0.05,0.13,0.01,0.04,0.04,0.02,0.0,-0.08,-0.03,0.04,0.03,-0.02,-0.06,0.14,0.01,0.54,0.68,1.0,0.52,0.42,0.24,0.52,0.61,0.78,0.44,0.36,0.13,0.06,-0.01,-0.1],[-0.03,-0.02,0.04,0.08,0.02,-0.01,0.0,-0.01,0.01,0.02,0.02,0.05,-0.02,-0.11,0.24,-0.18,0.15,-0.05,0.01,0.63,0.77,0.52,1.0,0.7,-0.01,0.61,0.73,0.54,0.9,0.69,-0.05,0.05,-0.01,0.02],[-0.06,-0.11,0.06,0.18,0.06,-0.03,0.0,-0.03,-0.01,0.02,0.02,0.06,-0.01,-0.1,0.25,-0.19,0.17,-0.16,0.01,0.12,0.38,0.42,0.7,1.0,-0.07,0.11,0.41,0.49,0.67,0.84,-0.07,0.01,-0.03,0.05],[0.03,0.04,-0.03,-0.06,0.05,0.02,0.03,0.0,-0.02,-0.01,-0.04,-0.02,-0.01,0.0,-0.05,-0.01,-0.06,0.06,0.03,0.12,0.13,0.24,-0.01,-0.07,1.0,0.12,0.11,0.14,-0.01,-0.06,0.58,-0.05,-0.05,-0.14],[0.06,0.23,-0.13,-0.12,-0.11,0.14,-0.0,0.04,0.04,-0.0,-0.01,-0.09,-0.02,0.03,0.01,0.02,-0.08,0.21,0.0,0.94,0.75,0.52,0.61,0.11,0.12,1.0,0.68,0.43,0.52,0.13,0.07,0.01,0.01,-0.02],[0.04,0.13,0.03,0.19,0.0,0.06,-0.02,0.03,0.02,0.01,0.01,-0.04,-0.03,-0.03,0.09,-0.12,0.03,0.09,-0.01,0.64,0.94,0.61,0.73,0.41,0.11,0.68,1.0,0.6,0.7,0.4,0.07,0.06,0.02,-0.01],[0.02,0.16,-0.06,0.05,0.01,0.1,-0.02,0.02,0.01,0.01,0.0,-0.04,-0.01,0.02,0.06,-0.04,-0.02,0.06,-0.0,0.43,0.6,0.78,0.54,0.49,0.14,0.43,0.6,1.0,0.46,0.45,0.14,0.05,-0.01,-0.0],[-0.04,-0.07,0.07,0.12,0.03,-0.04,-0.01,-0.01,0.01,0.02,0.02,0.06,-0.02,-0.15,0.29,-0.22,0.2,-0.11,-0.01,0.49,0.67,0.44,0.9,0.67,-0.01,0.52,0.7,0.46,1.0,0.76,-0.06,0.05,-0.02,0.02],[-0.07,-0.1,0.06,0.18,0.05,-0.04,-0.01,-0.03,-0.01,0.04,0.04,0.07,-0.01,-0.14,0.3,-0.2,0.18,-0.17,0.0,0.13,0.36,0.36,0.69,0.84,-0.06,0.13,0.4,0.45,0.76,1.0,-0.08,0.0,-0.04,0.07],[0.02,0.04,-0.02,-0.01,-0.0,0.02,-0.01,0.02,-0.01,-0.0,-0.04,-0.04,-0.01,0.05,-0.07,0.06,-0.05,0.06,-0.01,0.06,0.07,0.13,-0.05,-0.07,0.58,0.07,0.07,0.14,-0.06,-0.08,1.0,-0.01,-0.03,-0.08],[-0.02,0.09,-0.1,-0.05,0.06,0.1,-0.01,-0.11,-0.08,-0.01,-0.03,-0.13,0.05,0.02,0.01,0.02,0.06,0.03,-0.01,0.01,0.04,0.06,0.05,0.01,-0.05,0.01,0.06,0.05,0.05,0.0,-0.01,1.0,-0.03,-0.34],[0.01,-0.02,-0.01,0.03,-0.02,-0.06,-0.01,0.06,0.06,0.02,0.01,-0.01,0.0,-0.02,-0.0,0.0,-0.03,0.03,-0.01,0.02,0.04,-0.01,-0.01,-0.03,-0.05,0.01,0.02,-0.01,-0.02,-0.04,-0.03,-0.03,1.0,-0.11],[-0.03,-0.01,0.03,-0.01,0.02,0.05,0.04,-0.08,-0.07,0.09,0.13,0.06,0.01,0.08,-0.0,-0.01,0.04,-0.06,0.04,-0.03,-0.03,-0.1,0.02,0.05,-0.14,-0.02,-0.01,-0.0,0.02,0.07,-0.08,-0.34,-0.11,1.0]]},"imp":{"labels":["Curricular units 2nd sem (approved)","Curricular units 2nd sem (grade)","Curricular units 1st sem (approved)","Curricular units 1st sem (grade)","Curricular units 2nd sem (evaluations)","Age at enrollment","Tuition fees up to date","Curricular units 1st sem (evaluations)","Course","Father's occupation","Mother's occupation","GDP","Unemployment rate","Father's qualification","Mother's qualification"],"values":[0.1475,0.104,0.0904,0.0754,0.0455,0.0424,0.0396,0.0375,0.0373,0.0347,0.0301,0.0262,0.026,0.0259,0.0252]},"cm":[[212,32,40],[29,69,61],[15,20,407]]};
+const ORDER = ["Dropout", "Enrolled", "Graduate"];
+const MODELS = {
+  labels: ["SVM (tuned)", "Random Forest", "Logistic Reg.", "SVM", "KNN (k=14)", "Decision Tree"],
+  acc: [0.777, 0.774, 0.773, 0.755, 0.716, 0.705],
+  f1: [0.712, 0.706, 0.696, 0.670, 0.612, 0.649],
+  cls: { Dropout: [0.79, 0.79, 0.79, 0.77, 0.74, 0.72], Enrolled: [0.49, 0.48, 0.44, 0.40, 0.29, 0.42], Graduate: [0.86, 0.85, 0.86, 0.84, 0.81, 0.81] }
+};
+const SHORT = {
+  "Daytime/evening attendance": "Day/evening", "Previous qualification": "Prev. qualification",
+  "Nacionality": "Nationality", "Mother's qualification": "Mother qual.", "Father's qualification": "Father qual.",
+  "Mother's occupation": "Mother occ.", "Father's occupation": "Father occ.", "Educational special needs": "Special needs",
+  "Tuition fees up to date": "Fees up to date", "Scholarship holder": "Scholarship", "Age at enrollment": "Age at enrolment",
+  "Unemployment rate": "Unemployment", "Inflation rate": "Inflation"
+};
+const short = s => {
+  if (SHORT[s]) return SHORT[s];
+  const m = s.match(/Curricular units (1st|2nd) sem \((.+)\)/);
+  return m ? (m[1] === "1st" ? "S1 " : "S2 ") + m[2].replace("without evaluations", "no eval.") : s;
+};
+const fmt = n => n.toLocaleString("en-US");
+
+/* ---------- Theme ---------- */
+const root = document.documentElement;
+const mq = window.matchMedia("(prefers-color-scheme: dark)");
+try { const saved = localStorage.getItem("dropout-theme"); if (saved) root.dataset.theme = saved; } catch (e) {}
+const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : mq.matches;
+document.getElementById("themeBtn").addEventListener("click", () => {
+  const next = isDark() ? "light" : "dark";
+  root.dataset.theme = next;
+  try { localStorage.setItem("dropout-theme", next); } catch (e) {}
+  renderAll();
+});
+mq.addEventListener && mq.addEventListener("change", () => { if (!root.dataset.theme) renderAll(); });
+
+/* ---------- Hero tabs ---------- */
+document.querySelectorAll(".dcard .tab").forEach(t => t.addEventListener("click", () => {
+  document.querySelectorAll(".dcard .tab").forEach(x => x.setAttribute("aria-selected", x === t ? "true" : "false"));
+  document.querySelectorAll(".dcard .view").forEach(v => v.hidden = v.dataset.panel !== t.dataset.view);
+}));
+
+/* ---------- Charts ---------- */
+const css = v => getComputedStyle(root).getPropertyValue(v).trim();
+let charts = [];
+
+function renderAll() {
+  charts.forEach(c => c.destroy());
+  charts = [];
+  const C = { drop: css("--c-drop"), enrol: css("--c-enrol"), grad: css("--c-grad"), accent: css("--accent"),
+              muted: css("--muted"), grid: css("--chart-grid"), card: css("--card"), fg: css("--fg") };
+  const OC = [C.drop, C.enrol, C.grad];
+  Chart.defaults.font.family = '"Space Grotesk", sans-serif';
+  Chart.defaults.color = C.muted;
+  const tooltip = { backgroundColor: "#192c29", padding: 10, cornerRadius: 7 };
+  const base = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip } };
+  const axis = (o = {}) => ({ grid: { color: C.grid }, border: { display: false }, ticks: { font: { size: 10 } }, ...o });
+  const add = (id, cfg) => charts.push(new Chart(document.getElementById(id), cfg));
+
+  // Outcome doughnut
+  add("outcomeChart", { type: "doughnut",
+    data: { labels: ORDER, datasets: [{ data: D.target, backgroundColor: OC, borderColor: C.card, borderWidth: 3, hoverOffset: 6 }] },
+    options: { ...base, cutout: "66%", plugins: { legend: { display: true, position: "bottom", labels: { usePointStyle: true, boxWidth: 8, font: { size: 11 } } },
+      tooltip: { ...tooltip, callbacks: { label: c => ` ${c.label}: ${fmt(c.raw)} (${(c.raw / 4424 * 100).toFixed(1)}%)` } } } } });
+
+  // Academic performance
+  const pk = ["Curricular units 1st sem (approved)", "Curricular units 2nd sem (approved)", "Curricular units 1st sem (grade)", "Curricular units 2nd sem (grade)"];
+  add("perfChart", { type: "bar",
+    data: { labels: ["S1 approved", "S2 approved", "S1 grade", "S2 grade"],
+      datasets: ORDER.map((o, i) => ({ label: o, data: pk.map(k => D.means[k][i]), backgroundColor: OC[i], borderRadius: 4, maxBarThickness: 22 })) },
+    options: { ...base, plugins: { ...base.plugins, tooltip: { ...tooltip, callbacks: { label: c => ` ${c.dataset.label}: ${c.raw}` } } },
+      scales: { x: axis({ grid: { display: false } }), y: axis({ beginAtZero: true }) } } });
+
+  // Stacked 100% helper
+  function stacked(id, groups) {
+    const labels = groups.map(g => `${g.label} (${fmt(g.n)})`);
+    add(id, { type: "bar",
+      data: { labels, datasets: ORDER.map((o, i) => ({ label: o, data: groups.map(g => g.row[i]), backgroundColor: OC[i], borderSkipped: false, maxBarThickness: 26 })) },
+      options: { ...base, indexAxis: "y",
+        plugins: { ...base.plugins, tooltip: { ...tooltip, callbacks: { label: c => ` ${c.dataset.label}: ${c.raw}%` } } },
+        scales: { x: axis({ stacked: true, min: 0, max: 100, ticks: { font: { size: 10 }, callback: v => v + "%" } }),
+                  y: axis({ stacked: true, grid: { display: false } }) } } });
+  }
+  const pick = (k, i) => ({ label: D[k].labels[i], row: D[k].rows[i], n: D[k].n[i] });
+  stacked("finChart", [pick("tuition", 0), pick("tuition", 1), pick("debtor", 1), pick("debtor", 0), pick("scholar", 1), pick("scholar", 0)]);
+  stacked("demoChart", [0, 1, 2, 3].map(i => pick("age", i)).map(g => ({ ...g, label: "Age " + g.label })).concat([pick("gender", 0), pick("gender", 1)]));
+
+  // Models
+  add("modelChart", { type: "bar",
+    data: { labels: MODELS.labels, datasets: [
+      { label: "Accuracy", data: MODELS.acc, backgroundColor: C.accent, borderRadius: 4, maxBarThickness: 14 },
+      { label: "Macro F1", data: MODELS.f1, backgroundColor: C.muted + "88", borderRadius: 4, maxBarThickness: 14 }] },
+    options: { ...base, indexAxis: "y",
+      plugins: { legend: { display: true, position: "bottom", labels: { usePointStyle: true, boxWidth: 8, font: { size: 11 } } },
+        tooltip: { ...tooltip, callbacks: { label: c => ` ${c.dataset.label}: ${c.raw.toFixed(3)}` } } },
+      scales: { x: axis({ min: 0.5, max: 0.85, ticks: { font: { size: 10 }, callback: v => v.toFixed(2) } }), y: axis({ grid: { display: false } }) } } });
+
+  add("classChart", { type: "bar",
+    data: { labels: MODELS.labels, datasets: ORDER.map((o, i) => ({ label: o, data: MODELS.cls[o], backgroundColor: OC[i], borderRadius: 3, maxBarThickness: 10 })) },
+    options: { ...base, indexAxis: "y",
+      plugins: { ...base.plugins, tooltip: { ...tooltip, callbacks: { label: c => ` ${c.dataset.label} F1: ${c.raw.toFixed(2)}` } } },
+      scales: { x: axis({ min: 0, max: 1 }), y: axis({ grid: { display: false } }) } } });
+
+  add("impChart", { type: "bar",
+    data: { labels: D.imp.labels.map(short), datasets: [{ data: D.imp.values,
+      backgroundColor: D.imp.values.map((v, i) => i < 4 ? C.accent : C.muted + "77"), borderRadius: 3, maxBarThickness: 16 }] },
+    options: { ...base, indexAxis: "y",
+      plugins: { ...base.plugins, tooltip: { ...tooltip, callbacks: { title: c => D.imp.labels[c[0].dataIndex], label: c => ` Importance: ${c.raw.toFixed(3)}` } } },
+      scales: { x: axis({ beginAtZero: true }), y: axis({ grid: { display: false } }) } } });
+
+  renderCM(C);
+  drawHeatmap();
+}
+
+/* ---------- Confusion matrix ---------- */
+function renderCM(C) {
+  const cm = D.cm, rgb = hexToRgb(C.accent);
+  let h = '<table class="cm"><thead><tr><th></th>' + ORDER.map(o => `<th>Pred. ${o}</th>`).join("") + "</tr></thead><tbody>";
+  cm.forEach((row, i) => {
+    const total = row.reduce((a, b) => a + b, 0);
+    h += `<tr><th class="row">${ORDER[i]}</th>` + row.map(v => {
+      const p = v / total, a = 0.08 + p * 0.85;
+      return `<td style="background:rgba(${rgb},${a.toFixed(2)});color:${a > 0.5 ? "#fff" : C.fg}"><b>${v}</b><small>${(p * 100).toFixed(0)}%</small></td>`;
+    }).join("") + "</tr>";
+  });
+  document.getElementById("cm").innerHTML = h + "</tbody></table>";
+}
+function hexToRgb(h) {
+  h = h.replace("#", ""); if (h.length === 3) h = h.split("").map(x => x + x).join("");
+  const n = parseInt(h, 16); return `${n >> 16 & 255},${n >> 8 & 255},${n & 255}`;
+}
+function mix(a, b, t) {
+  const A = hexToRgb(a).split(",").map(Number), B = hexToRgb(b).split(",").map(Number);
+  return `rgb(${A.map((x, i) => Math.round(x + (B[i] - x) * t)).join(",")})`;
+}
+
+/* ---------- Correlation heatmap ---------- */
+const heat = { cell: 0, left: 0, top: 6 };
+function drawHeatmap() {
+  const wrap = document.getElementById("heatWrap"), cv = document.getElementById("heatmap");
+  const labels = D.corr.labels, m = D.corr.m, n = labels.length;
+  const ctx = cv.getContext("2d");
+  const small = wrap.clientWidth < 600;
+  const fontPx = small ? 9 : 11;
+  ctx.font = `${fontPx}px "Space Grotesk", sans-serif`;
+  const labW = Math.ceil(Math.max(...labels.map(l => ctx.measureText(short(l)).width))) + 10;
+  const cell = Math.max(13, Math.min(26, Math.floor((wrap.clientWidth - labW - 4) / n)));
+  const W = labW + cell * n + 4, H = heat.top + cell * n + labW;
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = W * dpr; cv.height = H * dpr; cv.style.width = W + "px"; cv.style.height = H + "px";
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  Object.assign(heat, { cell, left: labW, n });
+  const neg = css("--heat-neg"), pos = css("--heat-pos"), neu = css("--heat-neutral"), muted = css("--muted");
+  for (let i = 0; i < n; i++) for (let j = 0; j < i; j++) {
+    const v = m[i][j];
+    ctx.fillStyle = v >= 0 ? mix(neu, pos, Math.min(1, v)) : mix(neu, neg, Math.min(1, -v));
+    ctx.fillRect(labW + j * cell, heat.top + i * cell, cell - 1, cell - 1);
+  }
+  ctx.fillStyle = muted;
+  ctx.font = `${fontPx}px "Space Grotesk", sans-serif`;
+  ctx.textAlign = "right"; ctx.textBaseline = "middle";
+  labels.forEach((l, i) => ctx.fillText(short(l), labW - 6, heat.top + i * cell + cell / 2));
+  labels.forEach((l, j) => {
+    ctx.save(); ctx.translate(labW + j * cell + cell / 2, heat.top + n * cell + 6);
+    ctx.rotate(-Math.PI / 2); ctx.fillText(short(l), 0, 0); ctx.restore();
+  });
+}
+(function heatTooltip() {
+  const cv = document.getElementById("heatmap"), tip = document.getElementById("heatTip"), wrap = document.getElementById("heatWrap");
+  function show(e) {
+    const r = cv.getBoundingClientRect();
+    const x = e.clientX - r.left, y = e.clientY - r.top;
+    const j = Math.floor((x - heat.left) / heat.cell), i = Math.floor((y - heat.top) / heat.cell);
+    if (i < 0 || j < 0 || i >= heat.n || j >= heat.n || j >= i) { tip.style.opacity = 0; return; }
+    const v = D.corr.m[i][j], L = D.corr.labels;
+    tip.innerHTML = `<b>${v > 0 ? "+" : ""}${v.toFixed(2)}</b><br>${L[i]}<br>× ${L[j]}`;
+    const left = Math.min(x + wrap.scrollLeft + 14, wrap.scrollWidth - 270);
+    tip.style.left = Math.max(0, left) + "px"; tip.style.top = (y + 14) + "px"; tip.style.opacity = 1;
+  }
+  cv.addEventListener("mousemove", show);
+  cv.addEventListener("click", show);
+  cv.addEventListener("mouseleave", () => tip.style.opacity = 0);
+})();
+
+let rt;
+window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(drawHeatmap, 150); });
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(renderAll);
+</script>
+</body>
+</html>
